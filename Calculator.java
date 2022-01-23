@@ -113,7 +113,7 @@ public class Calculator extends JFrame {
         p_buttons.add(new CalculatorButton("3",tf));
         p_buttons.add(new CalculatorButton("*",tf));
         p_buttons.add(new CalculatorButton("0",tf));
-        p_buttons.add(new CalculatorButton(",",tf));
+        p_buttons.add(new CalculatorButton(".",tf));
         p_buttons.add(equal);
         p_buttons.add(new CalculatorButton("/",tf));
 
