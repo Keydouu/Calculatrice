@@ -1,192 +1,121 @@
-package GL;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.event.*;
+import java.io.*;
+import java.util.*;
+
 public class Calculator extends JFrame {
-    JButton b_0, b_1, b_2, b_3, b_4, b_5, b_6, b_7, b_8, b_9, b_plus, b_moins, b_multiplication, b_div, b_qual, b_reset;
-    JPanel p_affichage, p_buttons;
-    double current, total;
-    int nlastOperation;
-    JTextField tf;
-    String str;
-    public void calc(){
-        switch(nlastOperation){
-            case 1:
-                total+=current;
-                current=0;
-            break;
-            case 2:
-                total+=current;
-                current=0;
-            break;
-            case 3:
-                total*=current;
-                current=0;
-            break;
-            case 4:
-                total+=current;
-                current=0;
-            break;
-        }
-    }
-    public Calculator(){
-        setTitle("Calculatrice");
+	
+	//BACK END
+
+	public String doTheMath(String input){//later add something that check syntax
+		try{// i still have to add the parsing of ( and ) and ^
+			return String.valueOf(parseByAddition(input));
+		}
+		catch(Exception e){
+			return "Syntax error";
+		}
+	}
+	public double parseByAddition(String input){
+		double i=0;
+		if(input.contains("+")){
+			String[] strarray = input.split("\\+");
+			for(String elm: strarray)
+				i+=parseBySubstraction(elm);
+		}
+		else
+			i=parseBySubstraction(input);
+		return i;
+	}
+	public double parseBySubstraction(String input){
+		double i;
+		if(input.contains("-")){
+			String[] strarray = input.split("-");
+			i=parseByMultiplication(strarray[0]);
+			strarray[0]="0";
+			for(String elm: strarray)
+				i-=parseByMultiplication(elm);
+		}
+		else
+			i=parseByMultiplication(input);
+		return i;
+	}
+	public double parseByMultiplication(String input){
+		double i=1;
+		if(input.contains("*")){
+			String[] strarray = input.split("\\*");
+			for(String elm: strarray)
+				i*=parseByDivision(elm);
+		}
+		else
+			i=parseByDivision(input);
+		return i;
+	}
+	public double parseByDivision(String input){
+		double i;
+		if(input.contains("/")){
+			String[] strarray = input.split("/");
+			i=Double.parseDouble(strarray[0]);
+			strarray[0]="1";
+			for(String elm: strarray)
+				i/=Double.parseDouble(elm);
+		}
+		else
+			i=Double.parseDouble(input);
+		return i;
+	}
+
+	// FRONT END
+
+	JPanel p_affichage, p_buttons;
+	JLabel tf;
+	JButton equal, delete;
+	public Calculator(){
+		setTitle("Calculatrice");
         p_buttons= new JPanel();
-        p_buttons.setLayout(new GridLayout(4, 4, 0, 20));
+        p_buttons.setLayout(new GridLayout(5, 4, 0, 0));
         p_affichage=new JPanel();
-        current=0;
-        total=0;
-        nlastOperation=1;
         setSize(500,500);
 
-        tf=new JTextField();
-        tf.setEditable(false); 
+        tf=new JLabel("");
+        tf.setFont(new Font(Font.SERIF, Font.PLAIN, 30));
         p_affichage.add(tf);
-        tf.setPreferredSize(new Dimension(400, 100));
+        p_affichage.setPreferredSize(new Dimension(400, 70));
 
-        b_0 = new JButton("0");
-        b_1 = new JButton("1");
-        b_2 = new JButton("2");
-        b_3 = new JButton("3");
-        b_4 = new JButton("4");
-        b_5 = new JButton("5");
-        b_6 = new JButton("6");
-        b_7 = new JButton("7");
-        b_8 = new JButton("8");
-        b_9 = new JButton("9");
-        b_plus = new JButton("+");
-        b_moins = new JButton("-");
-        b_multiplication = new JButton("*");
-        b_div = new JButton("/");
-        b_qual = new JButton("ac");
-        b_reset = new JButton("=");
-
-        b_0.addActionListener(new ActionListener(){//perfecto
+        delete=new JButton("Del");
+        delete.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                current*=10;
-                str=tf.getText()+"0";
-                tf.setText(str);
-        }});
-        b_1.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+1;
-                str=tf.getText()+"1";
-                tf.setText(str);
-        }});
-        b_2.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+2;
-                str=tf.getText()+"2";
-                tf.setText(str);
-        }});
-        b_3.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+3;
-                str=tf.getText()+"3";
-                tf.setText(str);
-        }});
-        b_4.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+4;
-                str=tf.getText()+"4";
-                tf.setText(str);
-        }});
-        b_5.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+5;
-                str=tf.getText()+"5";
-                tf.setText(str);
-        }});
-        b_6.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+6;
-                str=tf.getText()+"6";
-                tf.setText(str);
-        }});
-        b_7.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+7;
-                str=tf.getText()+"7";
-                tf.setText(str);
-        }});
-        b_8.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+8;
-                str=tf.getText()+"8";
-                tf.setText(str);
-        }});
-        b_9.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                current=current*10+9;
-                str=tf.getText()+"9";
-                tf.setText(str);
+            	if(tf.getText().length()>0)
+                	tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
         }});
 
+        equal=new JButton("=");
+        equal.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+            	tf.setText(doTheMath(tf.getText()));
+        }});
 
-        b_plus.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                calc();
-                nlastOperation=1;
-                str=tf.getText()+"+";
-                tf.setText(str);
-        }});
-        b_moins.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                calc();
-                nlastOperation=2;
-                tf.setText(str);str=tf.getText()+"-";
-                tf.setText(str);
-        }});
-        b_multiplication.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                calc();
-                nlastOperation=3;
-                str=tf.getText()+"*";
-                tf.setText(str);
-        }});
-        b_div.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                calc();
-                nlastOperation=4;
-                str=tf.getText()+"";
-                tf.setText(str);
-        }});
-        b_qual.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                tf.setText("0");
-                current=0;
-                total=0;
-                nlastOperation=1;
-        }});
-        b_reset.addActionListener(new ActionListener(){//perfecto
-            public void actionPerformed(ActionEvent e){
-                calc();
-                tf.setText(Double.toString(total));
-                current=0;
-                total=0;
-                nlastOperation=1;
-        }});;
-        p_buttons.add(b_7);
-        p_buttons.add(b_8);
-        p_buttons.add(b_9);
-        p_buttons.add(b_plus);
-
-        p_buttons.add(b_4);
-        p_buttons.add(b_5);
-        p_buttons.add(b_6);
-        p_buttons.add(b_moins);
-
-        p_buttons.add(b_0);
-        p_buttons.add(b_1);
-        p_buttons.add(b_2);
-        p_buttons.add(b_3);
-        p_buttons.add(b_multiplication);
-
-        p_buttons.add(b_0);
-        p_buttons.add(b_qual);
-        p_buttons.add(b_reset);
-        p_buttons.add(b_div);
+        p_buttons.add(new CalculatorButton("(",tf));
+        p_buttons.add(new CalculatorButton(")",tf));//prevent from adding one if there's no ( ?
+        p_buttons.add(new CalculatorButton("^",tf));
+        p_buttons.add(delete);
+        p_buttons.add(new CalculatorButton("7",tf));
+        p_buttons.add(new CalculatorButton("8",tf));
+        p_buttons.add(new CalculatorButton("9",tf));
+        p_buttons.add(new CalculatorButton("+",tf));
+        p_buttons.add(new CalculatorButton("4",tf));
+        p_buttons.add(new CalculatorButton("5",tf));
+        p_buttons.add(new CalculatorButton("6",tf));
+        p_buttons.add(new CalculatorButton("-",tf));
+        p_buttons.add(new CalculatorButton("1",tf));
+        p_buttons.add(new CalculatorButton("2",tf));
+        p_buttons.add(new CalculatorButton("3",tf));
+        p_buttons.add(new CalculatorButton("*",tf));
+        p_buttons.add(new CalculatorButton("0",tf));
+        p_buttons.add(new CalculatorButton(",",tf));
+        p_buttons.add(equal);
+        p_buttons.add(new CalculatorButton("/",tf));
 
         setLayout(new BorderLayout());
         add(p_affichage,BorderLayout.PAGE_START);
@@ -194,8 +123,17 @@ public class Calculator extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-    public static void main(String[] args){
+	}
+	public static void main(String[] args){
         new Calculator();
     }
+}
+class CalculatorButton extends JButton{
+	public CalculatorButton(String s,JLabel tf){
+		this.setText(s);
+		addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                tf.setText(tf.getText()+s);
+        }});
+	}
 }
