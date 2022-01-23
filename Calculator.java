@@ -79,7 +79,7 @@ public class Calculator extends JFrame {
         setSize(500,500);
 
         tf=new JLabel("");
-        tf.setFont(new Font(Font.SERIF, Font.PLAIN, 30));
+        tf.setFont(new Font("Tahoma", Font.PLAIN, 30));
         p_affichage.add(tf);
         p_affichage.setPreferredSize(new Dimension(400, 70));
 
@@ -131,6 +131,7 @@ public class Calculator extends JFrame {
 class CalculatorButton extends JButton{
 	public CalculatorButton(String s,JLabel tf){
 		this.setText(s);
+		setFont(new Font("Tahoma", Font.PLAIN, 30));
 		addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 tf.setText(tf.getText()+s);
